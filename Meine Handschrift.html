@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meine Handschrift</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap">
+<style>
+:root{--bg:#f3efe6;--bg2:#e8e2d3;--fg:#1f1d18;--card:#fffdf8;--line:#ddd5c2;--acc:#3b4fd8;--acc2:#7a55e8;--ok:#dcf1de;--okfg:#1b6a27;--mut:#76705f;--sh:0 6px 20px rgba(60,50,20,.10);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14141a;--bg2:#1b1b24;--fg:#efeee9;--card:#1f1f29;--line:#34343f;--acc:#8ea2ff;--acc2:#b79bff;--ok:#1f3b24;--okfg:#a5e5ad;--mut:#a09fa8;--sh:0 6px 20px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#14141a;--bg2:#1b1b24;--fg:#efeee9;--card:#1f1f29;--line:#34343f;--acc:#8ea2ff;--acc2:#b79bff;--ok:#1f3b24;--okfg:#a5e5ad;--mut:#a09fa8;--sh:0 6px 20px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh;color:var(--fg);font:16px/1.45 -apple-system,system-ui,"Segoe UI",sans-serif;padding:16px;max-width:660px;margin-inline:auto}
+header{text-align:center;margin:6px 0 16px}
+h1{font:700 40px/1 Caveat,"Bradley Hand","Segoe Script",cursive;margin:0;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+header p{margin:4px 0 0;color:var(--mut);font-size:14px}
+.tabs{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:14px;box-shadow:var(--sh)}
+.tabs button{flex:1;border:0;background:none;color:var(--mut);border-radius:999px;padding:10px;font:600 15px inherit;font-family:inherit}
+.tabs button.on{background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+.card h2{font-size:15px;margin:0 0 8px;color:var(--mut);font-weight:600}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:11px 14px}
+button.pri{background:linear-gradient(90deg,var(--acc),var(--acc2));border:0;color:#fff;font-weight:600}
+.chead{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.letter{font:700 56px/1 Caveat,cursive;min-width:60px;text-align:center;color:var(--acc)}
+.bar{flex:1;height:8px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .3s}
+#prog{font-size:13px;color:var(--mut);white-space:nowrap}
+.pad{position:relative;width:100%;max-width:380px;margin:8px auto;aspect-ratio:1;background:#fffef9;border-radius:16px;border:2px solid var(--line);touch-action:none;overflow:hidden;background-image:linear-gradient(#0000 0 0),repeating-linear-gradient(0deg,#0000 0 29px,#efe9d8 29px 30px)}
+.pad canvas,.pad svg{position:absolute;inset:0;width:100%;height:100%}
+.pad canvas{touch-action:none}.pad svg{pointer-events:none}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>button{flex:1;min-width:90px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:7px}
+.grid button{padding:9px 0;font-size:17px;border-radius:11px}
+.grid button.saved{background:var(--ok);color:var(--okfg);border-color:transparent}
+.grid button.cur{outline:3px solid var(--acc);outline-offset:1px}
+textarea{width:100%;min-height:140px;font:inherit;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:12px}
+label{display:block;margin:10px 0 2px;font-size:14px;color:var(--mut)}
+input[type=range]{width:100%;accent-color:var(--acc)}
+select{font:inherit;padding:9px;border-radius:10px;background:var(--bg);color:var(--fg);border:1px solid var(--line);width:100%}
+.ai{display:flex;gap:10px;align-items:center;background:linear-gradient(90deg,#3b4fd818,#7a55e818);border-radius:14px;padding:10px 12px;margin-top:10px;font-size:14px}
+.ai input{width:22px;height:22px;accent-color:var(--acc)}
+.pages img{width:100%;border:1px solid var(--line);border-radius:8px;margin:8px 0;background:#fff;box-shadow:var(--sh)}
+.msg{font-size:14px;color:var(--mut);min-height:20px;margin:6px 0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><h1>Meine Handschrift</h1><p>Schreibe jedes Zeichen einmal – die KI macht den Rest.</p></header>
+<div class="tabs"><button id="t1" class="on">✍️ Schreiben</button><button id="t2">📝 Text</button></div>
+
+<section id="p1">
+  <div class="card">
+    <div class="chead"><div class="letter" id="curc">A</div><div style="flex:1"><div class="bar"><i id="barfill"></i></div><div id="prog"></div></div></div>
+    <div class="pad"><svg viewBox="0 0 300 300" preserveAspectRatio="none"><line x1="0" y1="210" x2="300" y2="210" stroke="#e24b4b" stroke-width="1.8"/><line x1="0" y1="120" x2="300" y2="120" stroke="#8aa6ee" stroke-width="1" stroke-dasharray="5 4"/></svg><canvas id="cv" width="300" height="300"></canvas></div>
+    <p class="msg" id="msg1">Rote Linie = Grundlinie. Die Größe musst du nicht perfekt treffen.</p>
+    <div class="row"><button id="undo">↩︎ Zurück</button><button id="clr">Löschen</button><button class="pri" id="save">Speichern ›</button></div>
+  </div>
+  <div class="card"><h2>Zeichen wählen · grün = gespeichert</h2><div class="grid" id="grid"></div></div>
+</section>
+
+<section id="p2" hidden>
+  <div class="card">
+    <h2>Dein Text</h2>
+    <textarea id="txt" placeholder="Hier Text eingeben …">Hallo, das ist meine Handschrift!</textarea>
+    <div class="ai"><input type="checkbox" id="auto" checked><div><b>KI-Größenangleichung</b><br><span id="aiinfo" style="color:var(--mut)">Gleicht Höhe, Grundlinie und Abstände deiner Zeichen automatisch an.</span></div></div>
+    <label>Größe: <span id="sv">130</span></label><input type="range" id="size" min="70" max="220" value="130">
+    <label>Zeilenabstand: <span id="lv">85</span>%</label><input type="range" id="lh" min="55" max="130" value="85">
+    <label>Buchstabenabstand: <span id="kv">0</span></label><input type="range" id="kern" min="-15" max="30" value="0">
+    <label>Hintergrund</label>
+    <select id="bg"><option value="white">Weiß</option><option value="lines">Weiß mit Linien</option><option value="transparent">Transparent</option></select>
+    <div class="row" style="margin-top:14px"><button class="pri" id="go">Handschrift erstellen</button></div>
+    <p class="msg" id="msg2"></p>
+  </div>
+  <div class="card" id="outcard" hidden>
+    <h2>Fertig! Bild lange drücken → „Sichern“, dann in GoodNotes einfügen. Oder direkt teilen:</h2>
+    <div class="row"><button id="share" class="pri">Teilen / In GoodNotes öffnen</button></div>
+    <div class="pages" id="pages"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+var CH='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÖÜäöüß0123456789.,!?:;-()'.split('');
+var H=300,B=210,KEY='hw_glyphs_v1',glyphs={},imgs={},cur=0;
+try{glyphs=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){glyphs={}}
+function $(i){return document.getElementById(i)}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(glyphs));return true}catch(e){return false}}
+function loadImg(c){return new Promise(function(r){var im=new Image();im.onload=function(){
+  var t=document.createElement('canvas');t.width=im.width;t.height=H;var x=t.getContext('2d');x.drawImage(im,0,0);
+  var d=x.getImageData(0,0,im.width,H).data,top=H;
+  for(var y=0;y<H&&top==H;y++)for(var i=0;i<im.width;i++)if(d[(y*im.width+i)*4+3]>20){top=y;break}
+  im.top=top;imgs[c]=im;r()};im.onerror=r;im.src=glyphs[c]})}
+Object.keys(glyphs).forEach(loadImg);
+
+/* KI: lernt aus deinen eigenen Zeichen die typischen Höhen und gleicht Ausreißer an */
+var ASC='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789bdfhklß',XH='acemnorsuvwxzgpqy',MAP={'Ä':'A','Ö':'O','Ü':'U','ä':'a','ö':'o','ü':'u'};
+function med(a){a.sort(function(x,y){return x-y});return a[Math.floor(a.length/2)]}
+function scales(){
+  var tg={},s={},n=0;
+  [ASC,XH].forEach(function(g,k){var h=[];g.split('').forEach(function(c){if(imgs[c])h.push(B-imgs[c].top)});if(h.length)tg[k]=med(h)});
+  CH.forEach(function(c){
+    var b=MAP[c]||c,k=ASC.indexOf(b)>=0?0:XH.indexOf(b)>=0?1:-1,im=imgs[b];
+    var v=1;if(k>=0&&im&&tg[k]){v=Math.max(.75,Math.min(1.35,tg[k]/Math.max(20,B-im.top)))}
+    s[c]=v;if(Math.abs(v-1)>.04&&imgs[c])n++;
+  });
+  return{s:s,n:n};
+}
+
+function tab(n){$('p1').hidden=n!=1;$('p2').hidden=n!=2;$('t1').className=n==1?'on':'';$('t2').className=n==2?'on':''}
+$('t1').onclick=function(){tab(1)};$('t2').onclick=function(){tab(2)};
+
+function drawGrid(){
+  var g=$('grid');g.innerHTML='';var n=0;
+  CH.forEach(function(c,i){
+    var b=document.createElement('button');b.textContent=c;
+    if(glyphs[c]){b.className='saved';n++}
+    if(i==cur)b.className+=' cur';
+    b.onclick=function(){cur=i;clearPad();drawGrid()};
+    g.appendChild(b);
+  });
+  $('curc').textContent=CH[cur];
+  $('prog').textContent=n+' / '+CH.length+' gespeichert';
+  $('barfill').style.width=(100*n/CH.length)+'%';
+}
+
+var cv=$('cv'),ctx=cv.getContext('2d'),strokes=[],stroke=null;
+function redraw(){
+  ctx.clearRect(0,0,H,H);ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=9;ctx.strokeStyle='#000';ctx.fillStyle='#000';
+  strokes.forEach(function(s){
+    if(s.length==1){ctx.beginPath();ctx.arc(s[0].x,s[0].y,4.5,0,7);ctx.fill();return}
+    ctx.beginPath();ctx.moveTo(s[0].x,s[0].y);
+    for(var i=1;i<s.length-1;i++){ctx.quadraticCurveTo(s[i].x,s[i].y,(s[i].x+s[i+1].x)/2,(s[i].y+s[i+1].y)/2)}
+    var l=s[s.length-1];ctx.lineTo(l.x,l.y);ctx.stroke();
+  });
+}
+function clearPad(){strokes=[];stroke=null;redraw()}
+function pos(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*H/r.width,y:(e.clientY-r.top)*H/r.height}}
+cv.addEventListener('pointerdown',function(e){e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(x){}stroke=[pos(e)];strokes.push(stroke);redraw()});
+cv.addEventListener('pointermove',function(e){if(!stroke)return;e.preventDefault();stroke.push(pos(e));redraw()});
+['pointerup','pointercancel','pointerleave'].forEach(function(t){cv.addEventListener(t,function(){stroke=null})});
+$('undo').onclick=function(){strokes.pop();redraw()};
+$('clr').onclick=clearPad;
+
+$('save').onclick=function(){
+  var d=ctx.getImageData(0,0,H,H).data,mn=H,mx=-1;
+  for(var y=0;y<H;y++)for(var x=0;x<H;x++)if(d[(y*H+x)*4+3]>20){if(x<mn)mn=x;if(x>mx)mx=x}
+  if(mx<0){$('msg1').textContent='Bitte zuerst etwas schreiben.';return}
+  var x0=Math.max(0,mn-10),x1=Math.min(H,mx+10),w=x1-x0;
+  var o=document.createElement('canvas');o.width=w;o.height=H;o.getContext('2d').drawImage(cv,x0,0,w,H,0,0,w,H);
+  var c=CH[cur];glyphs[c]=o.toDataURL('image/png');
+  var ok=persist();
+  loadImg(c).then(function(){
+    $('msg1').textContent=ok?'„'+c+'“ gespeichert ✓':'Gespeichert, aber der Browser-Speicher ist voll oder gesperrt.';
+    var nx=-1;for(var k=1;k<=CH.length;k++){var j=(cur+k)%CH.length;if(!glyphs[CH[j]]){nx=j;break}}
+    cur=nx>=0?nx:Math.min(cur+1,CH.length-1);clearPad();drawGrid();
+  });
+};
+
+['size','lh','kern'].forEach(function(id){$(id).oninput=function(){$({size:'sv',lh:'lv',kern:'kv'}[id]).textContent=this.value}});
+var blobs=[];
+function render(){
+  var text=$('txt').value,size=+$('size').value,lhp=+$('lh').value/100,kern=+$('kern').value,bg=$('bg').value,auto=$('auto').checked;
+  var W=1240,PH=1754,M=90,sc=size/H,lineH=size*lhp,spaceW=size*0.3;
+  var S=auto?scales():{s:{},n:0},pages=[],page,pc,x,y,missing={};
+  function k(c){return (S.s[c]||1)*sc}
+  function newPage(){
+    page=document.createElement('canvas');page.width=W;page.height=PH;pc=page.getContext('2d');
+    if(bg!='transparent'){pc.fillStyle='#fff';pc.fillRect(0,0,W,PH)}
+    pages.push(page);x=M;y=M;
+  }
+  function rule(){if(bg!='lines')return;pc.strokeStyle='#c9d6ee';pc.lineWidth=2;var by=y+B*sc;pc.beginPath();pc.moveTo(M/2,by);pc.lineTo(W-M/2,by);pc.stroke()}
+  function wordW(w){var t=0;for(var i=0;i<w.length;i++){var im=imgs[w[i]];t+=(im?im.width*k(w[i]):size*0.35)+kern}return t}
+  function nl(){x=M;y+=lineH;if(y+size>PH-M)newPage();rule()}
+  newPage();rule();
+  text.split('\n').forEach(function(p,pi){
+    if(pi>0)nl();
+    p.split(' ').forEach(function(w){
+      if(!w){x+=spaceW;return}
+      var ww=wordW(w);if(x>M&&x+ww>W-M)nl();
+      for(var i=0;i<w.length;i++){
+        var c=w[i],im=imgs[c];
+        if(im){var kk=k(c);pc.drawImage(im,x,y+B*sc-B*kk,im.width*kk,H*kk);x+=im.width*kk+kern}
+        else{missing[c]=1;x+=size*0.35+kern}
+      }
+      x+=spaceW;
+    });
+  });
+  return{pages:pages,n:S.n,missing:Object.keys(missing).filter(function(c){return c.trim()})};
+}
+$('go').onclick=function(){
+  if(!Object.keys(imgs).length){$('msg2').textContent='Erst im Tab „Schreiben“ Zeichen speichern.';return}
+  var r=render(),box=$('pages');box.innerHTML='';blobs=[];
+  r.pages.forEach(function(p,i){
+    var im=document.createElement('img');im.alt='Seite '+(i+1);im.src=p.toDataURL('image/png');box.appendChild(im);
+    p.toBlob(function(b){blobs[i]=b},'image/png');
+  });
+  $('outcard').hidden=false;
+  var m=r.missing.length?'Noch nicht gespeichert (als Lücke gesetzt): '+r.missing.join(' '):'Alle Zeichen vorhanden ✓';
+  if($('auto').checked)m+=' · KI hat '+r.n+' Zeichen in der Größe angepasst.';
+  $('msg2').textContent=m;
+  $('outcard').scrollIntoView({behavior:'smooth'});
+};
+$('share').onclick=function(){
+  try{
+    var files=blobs.filter(Boolean).map(function(b,i){return new File([b],'handschrift-'+(i+1)+'.png',{type:'image/png'})});
+    if(navigator.canShare&&navigator.canShare({files:files})){navigator.share({files:files}).catch(function(){})}
+    else $('msg2').textContent='Teilen wird hier nicht unterstützt – bitte das Bild lange drücken und sichern.';
+  }catch(e){$('msg2').textContent='Teilen nicht möglich – Bild lange drücken und sichern.'}
+};
+drawGrid();redraw();
+})();
+</script>
+</body>
+</html>
